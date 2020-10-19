@@ -1,0 +1,27 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t kukold/09prod_front -f ./client/Dockerfile.dev ./client
+
+# anything exists here with non-zero status, the build will be failed
+# so, basically it's tests place
+script:
+  - docker run kukold/09prod_front yarn test
+
+# deployment step
+after_success:
+  - docker build -t kukold/09prod_front ./client
+  - docker build -t kukold/09prod_nginx ./nginx
+  - docker build -t kukold/09prod_worker ./worker
+  - docker build -t kukold/09prod_server ./server
+
+  # Log in to the docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to the docker hub
+  - docker push kukold/09prod_front
+  - docker push kukold/09prod_nginx
+  - docker push kukold/09prod_worker
+  - docker push kukold/09prod_server
