@@ -19,7 +19,7 @@ after_success:
   - docker build -t kukold/09prod_server ./server
 
   # Log in to the docker cli
-  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+  - echo "$DOCKER_HUB_SECRET" | docker login -u "$DOCKER_HUB_ID" --password-stdin
   # push images to the docker hub
   - docker push kukold/09prod_front
   - docker push kukold/09prod_nginx
