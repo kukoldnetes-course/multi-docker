@@ -25,3 +25,16 @@ after_success:
   - docker push kukoldnetes/09prod_nginx
   - docker push kukoldnetes/09prod_worker
   - docker push kukoldnetes/09prod_server
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-771818164609"
+  bucket_path: "multi-docker"
+  on:
+    branch: master
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "$AWS_SECRET_KEY"
+  skip_cleanup: true
